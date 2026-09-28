@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FitBuddy - AI Fitness Planner</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f5f3;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 900px;
+            margin: 50px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #1f8f4c;
+            text-align: center;
+        }
+
+        p {
+            text-align: center;
+            color: #555;
+        }
+
+        form {
+            margin-top: 30px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 7px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            background: #1f8f4c;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #16723b;
+        }
+
+        .feedback {
+            margin-top: 40px;
+            border-top: 1px solid #ddd;
+            padding-top: 25px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>FitBuddy</h1>
+
+    <p>AI Fitness Plan Generator</p>
+
+    <form action="/generate-workout" method="post">
+
+        <label>User ID</label>
+        <input type="text" name="user_id" required>
+
+        <label>Name</label>
+        <input type="text" name="name" required>
+
+        <label>Weight (kg)</label>
+        <input type="number" name="weight_kg" step="0.1" required>
+        <label>Age</label>
+<input
+    type="number"
+    name="age"
+    required
+>
+
+<label>Intensity</label>
+<select name="intensity" required>
+    <option value="low">Low</option>
+    <option value="medium">Medium</option>
+    <option value="high">High</option>
+</select>
+
+        <label>Goal</label>
+        <input type="text" name="goal" placeholder="Example: Weight loss" required>
+
+        <label>Experience</label>
+        <select name="experience">
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+        </select>
+
+        <button type="submit">
+            Generate Workout
+        </button>
+
+    </form>
+
+    <div class="feedback">
+
+        <h2>Feedback</h2>
+
+        <form action="/submit-feedback" method="post">
+
+            <label>User ID</label>
+            <input type="text" name="user_id" required>
+
+            <label>Feedback</label>
+            <textarea
+                name="feedback"
+                placeholder="Enter your feedback"
+                required>
+            </textarea>
+
+            <button type="submit">
+                Submit Feedback
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+<!-- 1. Output show panna intha div-a form-kku mela/keela serunga -->
+    <div id="workoutResult" style="display:none; background:#eef7f2; padding:20px; border-radius:8px; margin-top:20px;">
+        <h3>Your Workout Plan:</h3>
+        <p id="resultText"></p>
+    </div>
+
+</div> <!-- Container Ends -->
+
+<!-- 2. INTHA SCRIPT TAG-A </body> TAG-KKU MELA ADD PANNUNGA -->
+<script>
+    // Form submission-a handle panna JavaScript
+    const form = document.querySelector('form[action="/generate-workout"]');
+    
+    if (form) {
+        form.addEventListener('submit', async function(event) {
+            // 👇 PAGE REFRESH AAGAMAL THADUKKUM MUKKIYAMANA LINE
+            event.preventDefault();
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const resultBox = document.getElementById('workoutResult');
+            const resultText = document.getElementById('resultText');
+
+            // Form inputs-la irundhu values-a edukkuroom
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            // Loading State
+            submitBtn.innerText = "Generating...";
+            submitBtn.disabled = true;
+
+            try {
+                // Backend API-kku background-la request anuppugirom
+                const response = await fetch('/generate-workout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    resultText.innerText = result.workout_plan || "Workout plan generated successfully!";
+                } else {
+                    resultText.innerText = "Error generating workout. Try again.";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                resultText.innerText = "Success! (Demo Output - Connect to server for live AI)";
+            } finally {
+                // Output-a screen-la kaatugirom
+                resultBox.style.display = "block";
+                submitBtn.innerText = "Generate Workout";
+                submitBtn.disabled = false;
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
+</body>
+</html>

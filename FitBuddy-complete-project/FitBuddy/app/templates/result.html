@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}FitBuddy | Your Plan{% endblock %}
+
+{% block content %}
+
+<h1>Your Workout Plan</h1>
+
+{% if message %}
+    <div class="alert">
+        {{ message }}
+    </div>
+{% endif %}
+
+<h2>Workout Plan</h2>
+
+<div class="card">
+    <pre>{{ workout_plan }}</pre>
+</div>
+
+<h2>Nutrition Tip</h2>
+
+<div class="card">
+    {% if nutrition_tip %}
+        <p>{{ nutrition_tip }}</p>
+    {% else %}
+        <p>No nutrition tip available.</p>
+    {% endif %}
+</div>
+
+{% if user %}
+<h2>User Details</h2>
+
+<p><strong>Name:</strong> {{ user.name }}</p>
+<p><strong>Age:</strong> {{ user.age }}</p>
+<p><strong>Weight:</strong> {{ user.weight_kg }} kg</p>
+<p><strong>Goal:</strong> {{ user.goal }}</p>
+<p><strong>Intensity:</strong> {{ user.intensity }}</p>
+<p><strong>Experience:</strong> {{ user.experience }}</p>
+{% endif %}
+
+{% endblock %}
